@@ -2,155 +2,982 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7a1f16">
 <title>VAN KA RESTAU — Restaurant malien</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ 
+  
 <style>
-:root{--p:#7a1f16;--g:#d89b32;--c:#fff8ed;--d:#1d1714;--m:#766b64;--green:#237a4b;--red:#b3261e;--shadow:0 10px 30px #2a160c1f}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:var(--c);color:var(--d)}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.top{background:var(--d);color:#fff;text-align:center;padding:8px;font-size:13px}.nav{position:sticky;top:0;z-index:20;background:#fff;box-shadow:0 2px 15px #0001;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}.logo{font-weight:900;color:var(--p);font-size:20px}.links{display:flex;gap:6px}.links button,.mobile button{border:0;background:transparent;padding:10px;font-weight:700;border-radius:10px}.cart{background:var(--p)!important;color:#fff!important}
-main,.section{max-width:1100px;margin:auto;padding:24px 16px}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:25px;align-items:center}.hero h1{font-size:clamp(40px,7vw,72px);line-height:1;margin:10px 0}.hero h1 span{color:var(--p)}.hero p{font-size:18px;color:var(--m);line-height:1.6}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800}.primary{background:var(--p);color:#fff}.gold{background:var(--g)}.light{background:#fff;border:1px solid #eadbca}.heroCard{min-height:280px;border-radius:25px;background:linear-gradient(135deg,#7a1f16,#b94d29,#d89b32);color:#fff;display:flex;align-items:end;padding:20px;box-shadow:var(--shadow);font-weight:800}
-.head{display:flex;justify-content:space-between;align-items:end;gap:10px}.muted{color:var(--m)}.cats{display:flex;gap:8px;overflow:auto;padding:10px 0}.chip{border:1px solid #eadbca;background:#fff;border-radius:99px;padding:9px 13px;white-space:nowrap}.chip.active{background:var(--p);color:#fff}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid #f0e4d7}.food{height:175px;display:grid;place-items:center;font-size:70px;background:#fff0d7;overflow:hidden}.food img{width:100%;height:100%;object-fit:cover}.body{padding:15px}.badge{font-size:12px;background:#e8f6ee;color:var(--green);padding:5px 8px;border-radius:99px;font-weight:800}.bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.price{font-weight:900;color:var(--p);font-size:18px}.small{border:0;background:var(--p);color:#fff;border-radius:10px;padding:9px 12px;font-weight:800}
-.about{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box,.panel{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow)}
-footer{background:var(--d);color:#fff;padding:30px 16px}.foot{max-width:1100px;margin:auto}
-.modal{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:flex-end}.modal.show{display:flex}.modalbox{background:#fff;width:min(650px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eee7df;border-radius:50%;width:38px;height:38px;font-size:20px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-weight:800;font-size:14px}input,select,textarea{width:100%;padding:11px;border:1px solid #decfc0;border-radius:10px;background:#fff}textarea{min-height:85px}.full{grid-column:1/-1}
-.item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee}.qty{display:flex;gap:6px;align-items:center}.qty button{border:0;border-radius:8px;width:30px;height:30px}.total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;padding:15px 0}
-.admin{display:none}.admin.show{display:block}.adminTop{background:#211713;color:#fff;border-radius:20px;padding:18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}.stat{background:#fff;color:#222;padding:14px;border-radius:13px}.stat b{font-size:24px;display:block}.tabs{display:flex;gap:7px;overflow:auto;margin:15px 0}.tab{border:0;background:#eee5dc;padding:10px 13px;border-radius:10px;font-weight:800;white-space:nowrap}.tab.active{background:var(--p);color:#fff}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.actions2{display:flex;gap:6px;flex-wrap:wrap}.danger{background:#fbe8e6!important;color:var(--red)!important}.success{background:#e8f6ee!important;color:var(--green)!important}.empty{text-align:center;padding:30px;color:var(--m)}
-.mobile{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:50;justify-content:space-around;border-top:1px solid #eadfd4}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,100px);background:#241b17;color:#fff;padding:12px 17px;border-radius:12px;z-index:300;transition:.3s}.toast.show{transform:translate(-50%,0)}
-@media(max-width:760px){.links{display:none}.mobile{display:flex}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.about{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}main,.section{padding-bottom:75px}}@media(max-width:430px){.grid{grid-template-columns:1fr}}
+  
+  
+  .creator-top {
+  width: 100%;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.creator-content {
+  display: inline-block;
+  animation: creatorMove 2.5s ease-in-out infinite;
+}
+
+.creator-content strong {
+  font-weight: 900;
+  letter-spacing: .05em;
+}
+
+.creator-content a {
+  color: orange;
+  text-decoration: yelow;
+}
+
+@keyframes creatorMove {
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+
+  
+  
+  
+  
+    
+        
+    
+:root{--primary:#7a1f16;--primary2:#a52d1f;--gold:#d89b32;--cream:#fff8ed;--dark:#1d1714;--muted:#766b64;--white:#fff;--green:#237a4b;--red:#b3261e;--shadow:0 10px 30px rgba(42,22,12,.12);--radius:18px}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--cream);color:var(--dark)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.topbar{background:var(--dark);color:#fff;padding:8px 16px;text-align:center;font-size:13px}
+header{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 2px 15px #00000012}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--primary);font-size:20px}.logoMark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;border:3px solid var(--gold)}
+.navlinks{display:flex;gap:6px;align-items:center}.navlinks button,.mobileNav button{border:0;background:transparent;padding:10px 12px;border-radius:12px;color:var(--dark);font-weight:700}.navlinks button:hover{background:#f5eee6}.cartBtn{background:var(--primary)!important;color:#fff!important}
+.hero{max-width:1100px;margin:20px auto;padding:34px 18px;display:grid;grid-template-columns:1.1fr .9fr;gap:25px;align-items:center}.heroText h1{font-size:clamp(38px,7vw,72px);line-height:.98;margin:8px 0 18px}.heroText h1 span{color:var(--primary)}.heroText p{font-size:18px;color:var(--muted);line-height:1.6}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{border:0;border-radius:13px;padding:13px 17px;font-weight:800}.btnPrimary{background:var(--primary);color:#fff}.btnGold{background:var(--gold);color:#251a10}.btnLight{background:#fff;border:1px solid #eadbca}
+.heroCard{min-height:300px;border-radius:28px;background:linear-gradient(135deg,#7a1f16,#b94d29 55%,#d89b32);display:flex;align-items:end;padding:25px;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden}.heroCard:before{content:"🍛";font-size:150px;position:absolute;right:25px;top:35px;transform:rotate(-7deg)}.heroCard div{position:relative;z-index:2;background:#0006;border-radius:15px;padding:13px}
+.section{max-width:1100px;margin:0 auto;padding:25px 16px 55px}.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:18px}.section h2{font-size:30px;margin:0 0 5px}.muted{color:var(--muted)}
+.categories{display:flex;gap:8px;overflow:auto;padding:3px 0 12px}.chip{white-space:nowrap;border:1px solid #eadbca;background:#fff;padding:9px 13px;border-radius:999px;font-weight:700}.chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid #f0e4d7}.foodImg{height:175px;display:grid;place-items:center;font-size:75px;background:linear-gradient(135deg,#fff0d7,#f8d3a3);overflow:hidden}.foodImg img{width:100%;height:100%;object-fit:cover;display:block}.dishPhotoPreview{width:110px;height:110px;border-radius:14px;object-fit:cover;border:1px solid #eadbca;background:#fff0d7}.adminDishThumb{width:72px;height:72px;overflow:hidden;display:grid;place-items:center;flex:0 0 72px;border-radius:12px;object-fit:cover;background:#fff0d7;flex:none}.adminDishInfo{display:flex;align-items:center;gap:12px;min-width:0}.cardBody{padding:15px}.cardBody h3{margin:0 0 5px}.price{font-weight:900;color:var(--primary);font-size:18px}.cardBottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}.smallBtn{border:0;border-radius:10px;padding:9px 12px;font-weight:800;background:var(--primary);color:#fff}.badge{font-size:12px;padding:5px 8px;border-radius:999px;background:#e8f6ee;color:var(--green);font-weight:800}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:18px}.infoBox{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}.infoBox h3{margin-top:0}
+footer{background:var(--dark);color:#fff;padding:35px 16px}.footerInner{max-width:1100px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:25px}
+.modal{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:flex-end;justify-content:center}.modal.show{display:flex}.modalBox{background:#fff;width:min(650px,100%);max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px}.modalHead{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:2}.close{border:0;background:#f1e9e0;width:38px;height:38px;border-radius:50%;font-size:20px}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-weight:800;font-size:14px;display:block;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #decfc0;border-radius:11px;padding:11px;background:#fff}textarea{min-height:85px;resize:vertical}.full{grid-column:1/-1}
+.orderItem{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #eee}.qty{display:flex;align-items:center;gap:7px}.qty button{border:0;width:30px;height:30px;border-radius:8px;background:#eee}.total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;padding:15px 0}
+.mobileNav{display:none}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#241b17;color:#fff;padding:12px 17px;border-radius:12px;z-index:300;transition:.3s;box-shadow:var(--shadow)}.toast.show{transform:translateX(-50%) translateY(0)}
+.admin{display:none}.admin.show{display:block}.adminTop{background:#211713;color:#fff;border-radius:20px;padding:18px;margin-bottom:18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}.stat{background:#fff;color:var(--dark);padding:14px;border-radius:14px}.stat b{font-size:25px;display:block}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:15px}.tab{border:0;background:#eee5dc;padding:10px 13px;border-radius:10px;font-weight:800;white-space:nowrap}.tab.active{background:var(--primary);color:#fff}.adminPanel{background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.adminRow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.adminRow:last-child{border-bottom:0}.adminActions{display:flex;gap:6px;flex-wrap:wrap}.danger{background:#fbe8e6!important;color:var(--red)!important}.success{background:#e8f6ee!important;color:var(--green)!important}.empty{text-align:center;padding:30px;color:var(--muted)}
+@media(max-width:760px){.navlinks{display:none}.mobileNav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:90;justify-content:space-around;padding:7px;border-top:1px solid #eadfd4}.mobileNav button{font-size:11px;padding:7px}.hero{grid-template-columns:1fr;padding-top:15px}.heroCard{min-height:230px}.grid{grid-template-columns:1fr 1fr}.about,.footerInner{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr}.full{grid-column:auto}.section{padding-bottom:75px}.stats{grid-template-columns:1fr 1fr}.cardBody{padding:12px}.foodImg{height:130px;font-size:58px}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.heroText h1{font-size:45px}}
+
+.admin.theme-bordeaux .adminTop{background:linear-gradient(135deg,#5b1711,#8f2419)}
+.admin.theme-bordeaux .tab.active{background:#7a1f16}
+.admin.theme-vert .adminTop{background:linear-gradient(135deg,#14532d,#237a4b)}
+.admin.theme-vert .tab.active{background:#237a4b}
+.admin.theme-or .adminTop{background:linear-gradient(135deg,#6b4b0b,#a97816)}
+.admin.theme-or .tab.active{background:#a97816}
+.admin.theme-nuit .adminTop{background:linear-gradient(135deg,#111827,#334155)}
+.admin.theme-nuit .tab.active{background:#334155}
+.admin.theme-vert .stat,.admin.theme-or .stat,.admin.theme-nuit .stat,.admin.theme-bordeaux .stat{border-top:3px solid transparent}
+.admin.theme-vert .stat{border-top-color:#237a4b}
+.admin.theme-or .stat{border-top-color:#a97816}
+.admin.theme-nuit .stat{border-top-color:#334155}
+.admin.theme-bordeaux .stat{border-top-color:#7a1f16}
+.themeGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.themeChoice{border:2px solid #eadbca;background:#fff;border-radius:14px;padding:12px;text-align:left;font-weight:800}
+.themeChoice.active{border-color:var(--primary);box-shadow:0 0 0 2px #7a1f1620}
+.themeDot{width:30px;height:30px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:8px}
+@media(max-width:430px){.themeGrid{grid-template-columns:1fr}}
 </style>
+
+<style id="vkPhotoSizePatch">
+.foodImg{width:100%;height:175px;overflow:hidden;display:grid;place-items:center}
+.foodImg img{width:100%;height:100%;object-fit:cover;display:block}
+.adminDishThumb{width:72px;height:72px;min-width:72px;object-fit:cover;border-radius:10px;display:block}
+  
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.signature {
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+
+.signature span {
+    display: inline-block;
+}
+
+.signature strong {
+    font-weight: bold;
+}
+
+.signature a {
+    margin-left: 8px;
+    color: green;
+    font-weight: bold;
+    text-decoration: wite;
+}
+  
+</style>
+
+<style id="vkHistoryPatch">
+.historyGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.historyGrid{grid-template-columns:1fr}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // VAN KA RESTAU — connexion au nouveau projet Supabase
+  const SUPABASE_URL = "https://ysbyguyriolctlgdcbsq.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_uM__1eHFTHAd21_iCjYDJg_AJ0ul45t";
+
+  // Client Supabase disponible dans tout le frontend
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  // Connexion Supabase : le menu public est désormais chargé depuis menu_items.
+  // Les opérations d’ajout/modification/suppression sont protégées par RLS côté Supabase.
+  window.addEventListener("DOMContentLoaded", async () => {
+    const { error } = await supabaseClient
+      .from("menu_items")
+      .select("id")
+      .limit(1);
+
+    if (error) {
+      console.error("VAN KA RESTAU — erreur Supabase :", error);
+    } else {
+      console.log("VAN KA RESTAU — Supabase connecté avec succès.");
+    }
+  });
+</script>
 </head>
 <body>
-<script>
-const SUPABASE_URL="https://fokxuvesazpgowneykcd.supabase.co";
-const SUPABASE_KEY="sb_publishable_sO6VaybNjHsiK5dPIuLS_g_8D-0EXwR";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-</script>
+  
+  
+  
+  
+      
+    <div class="creator-top">
+  <span class="creator-content">
+    💻 Créé par
+    <a
+      https://whatsapp.com/dl
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <strong>MOH-TECH-AWARD</strong>
+    </a>
+    —
+    <a
+      Utilisons WhatsApp pour discuter et s’appeler gratuitement. C’est rapide, simple et sécurisé. À télécharger sur 
 
-<div class="top">🇲🇱 Cuisine malienne • Commandes & réservations en ligne</div>
-<nav class="nav"><div class="logo">VK • VAN KA RESTAU</div><div class="links">
-<button onclick="go('home')">Accueil</button><button onclick="go('menu')">Menu</button><button onclick="openReservation()">Réserver</button><button onclick="openAdmin()">Gérant</button><button class="cart" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
-</div></nav>
+>
+      📱 +22394866798
+    </a>
+  </span>
+</div>
+  
+  
+  
+  
+           
 
-<main id="client">
-<section id="home" class="hero"><div><b>Restaurant malien 🇲🇱</b><h1>Les saveurs du <span>Mali</span> dans votre assiette.</h1><p>Découvrez nos plats, commandez à distance ou réservez votre table en quelques secondes.</p><div class="actions"><button class="btn primary" onclick="go('menu')">🍛 Voir le menu</button><button class="btn gold" onclick="openReservation()">📅 Réserver</button></div></div><div class="heroCard">🍛<br>Une cuisine généreuse, authentique et chaleureuse.</div></section>
-<section id="menu" class="section"><div class="head"><div><h2>Notre menu</h2><span class="muted">Choisissez vos plats préférés</span></div><button class="btn light" onclick="openCart()">🛒 <span id="cartCount2">0</span></button></div><div id="cats" class="cats"></div><div id="grid" class="grid"></div></section>
-<section class="section"><h2>Pourquoi VAN KA ?</h2><div class="about"><div class="box"><h3>🍲 Cuisine authentique</h3><p>Des recettes inspirées des saveurs maliennes.</p></div><div class="box"><h3>📱 Commande facile</h3><p>Commandez directement depuis votre téléphone.</p></div><div class="box"><h3>📅 Réservation</h3><p>Réservez votre table à l'avance.</p></div><div class="box"><h3>💬 Contact</h3><p>Une équipe à votre service.</p></div></div></section>
-</main>
-
-<section id="admin" class="section admin"><div class="adminTop"><div class="head"><div><small>ESPACE PROFESSIONNEL</small><h2>Tableau de bord</h2><span id="role"></span></div><button class="btn gold" onclick="logout()">Déconnexion</button></div><div class="stats"><div class="stat">Commandes<b id="sOrders">0</b></div><div class="stat">Réservations<b id="sBookings">0</b></div><div class="stat">Plats<b id="sDishes">0</b></div><div class="stat">Employés<b id="sStaff">0</b></div></div></div><div class="tabs"><button class="tab active" onclick="adminTab('orders')">📦 Commandes</button><button class="tab" onclick="adminTab('bookings')">📅 Réservations</button><button class="tab" onclick="adminTab('dishes')">🍛 Menu</button><button class="tab manager" onclick="adminTab('history')">🗂️ Historique</button></div><div id="adminContent" class="panel"></div></section>
-
-<footer><div class="foot"><h2>VAN KA RESTAU 🇲🇱</h2><p>Les saveurs du Mali dans votre assiette.</p><p>11h00 — 23h00</p></div></footer>
-<div class="mobile"><button onclick="go('home')">🏠<br>Accueil</button><button onclick="go('menu')">🍛<br>Menu</button><button onclick="openReservation()">📅<br>Réserver</button><button onclick="openCart()">🛒<br>Panier</button><button onclick="openAdmin()">⚙️<br>Gérant</button></div>
-
-<div id="cartModal" class="modal" onclick="if(event.target===this)closeModal('cartModal')"><div class="modalbox"><div class="modalhead"><h2>🛒 Panier</h2><button class="close" onclick="closeModal('cartModal')">×</button></div><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">0 FCFA</span></div><button class="btn primary" style="width:100%" onclick="openCheckout()">Continuer</button></div></div>
-<div id="checkoutModal" class="modal"><div class="modalbox"><div class="modalhead"><h2>📦 Finaliser</h2><button class="close" onclick="closeModal('checkoutModal')">×</button></div><form id="checkoutForm" class="form"><div><label>Nom *</label><input id="cName" required></div><div><label>Téléphone *</label><input id="cPhone" required type="tel"></div><div><label>Type *</label><select id="cType"><option>À emporter</option><option>Livraison</option><option>Sur place</option></select></div><div><label>Paiement</label><select id="cPay"><option>À la livraison / sur place</option><option>Espèces</option><option>Orange Money</option><option>Moov Money</option></select></div><div class="full"><label>Adresse / remarque</label><textarea id="cNote"></textarea></div><div class="full"><button class="btn primary" style="width:100%">✅ Envoyer</button></div></form></div></div>
-<div id="reservationModal" class="modal"><div class="modalbox"><div class="modalhead"><h2>📅 Réserver</h2><button class="close" onclick="closeModal('reservationModal')">×</button></div><form id="reservationForm" class="form"><div><label>Nom *</label><input id="bName" required></div><div><label>Téléphone *</label><input id="bPhone" required type="tel"></div><div><label>Date *</label><input id="bDate" required type="date"></div><div><label>Heure *</label><input id="bTime" required type="time"></div><div><label>Personnes *</label><input id="bPeople" required type="number" min="1" max="30" value="2"></div><div class="full"><label>Message</label><textarea id="bNote"></textarea></div><div class="full"><button class="btn gold" style="width:100%">📅 Confirmer</button></div></form></div></div>
-<div id="loginModal" class="modal"><div class="modalbox"><div class="modalhead"><h2>🔐 Connexion</h2><button class="close" onclick="closeModal('loginModal')">×</button></div><form id="loginForm"><label>Email</label><input id="loginEmail" type="email" required autocomplete="username"><label>Mot de passe</label><input id="loginPass" type="password" required autocomplete="current-password"><button class="btn primary" style="width:100%;margin-top:15px">Se connecter</button></form></div></div>
+<div class="topbar">
+  🇲🇱 Cuisine malienne • Commandes & réservations en ligne
+  
+  
+</div>
+<header><nav class="nav"><div class="logo"><span class="logoMark">DFC</span> dugukla-food-club</div><div class="navlinks">
+<button onclick="go('home')">Accueil</button><button onclick="go('menu')">Menu</button><button onclick="openReservation()">Réserver</button><button onclick="openAdmin()">Gérant</button><button class="cartBtn" onclick="openCart()">🛒 Panier <span id="cartCount">0</span></button>
+</div></nav></header>
+<main id="clientApp">
+<section id="home" class="hero"><div class="heroText"><div class="badge">Restaurant de sadiola 🇲🇱</div><h1>Les saveurs de <span>sadiola</span> dans votre assiette.</h1><p>Bienvenue chez dugu-kla-food. Découvrez nos plats, commandez à distance ou réservez votre table en quelques secondes.</p><div class="actions"><button class="btn btnPrimary" onclick="go('menu')">🍛 Voir le menu</button><button class="btn btnGold" onclick="openReservation()">📅 Réserver une table</button></div></div><div class="heroCard"><div><b>Dugukla-food-club</b><br>Une cuisine généreuse, authentique et chaleureuse.</div></div></section>
+<section id="menu" class="section"><div class="sectionHead"><div><h2>Notre menu</h2><div class="muted">Choisissez vos plats préférés</div></div><button class="btn btnLight" onclick="openCart()">🛒 <span id="cartCount2">0</span></button></div><div id="categories" class="categories"></div><div id="menuGrid" class="grid"></div></section>
+<section class="section"><div class="sectionHead"><div><h2>Pourquoi dugukla-food-club ?</h2><div class="muted">Simple, bon et proche de vous.</div></div></div><div class="about">
+<div class="infoBox"><h3>🍲 Cuisine authentique</h3><p>Des recettes inspirées des saveurs maliennes, préparées avec soin.</p></div><div class="infoBox"><h3>📱 Commande facile</h3><p>Depuis votre téléphone, ajoutez vos plats, choisissez le service et envoyez votre commande.</p></div><div class="infoBox"><h3>📅 Réservation</h3><p>Réservez votre table à l'avance et évitez l'attente.</p></div><div class="infoBox"><h3>💬 Contact rapide</h3><p>Besoin d'une information ? Utilisez le bouton WhatsApp ou appelez le restaurant.</p></div>
+</div></section></main>
+<section id="adminApp" class="section admin"><div class="adminTop"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><small>ESPACE PROFESSIONNEL</small><h2 style="margin:4px 0">Tableau de bord</h2><span id="adminRole"></span></div><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="btn btnLight managerOnly" id="themeBtn" style="display:none" onclick="openThemePicker()">🎨 Thème</button><button class="btn btnLight managerOnly" id="resetDashboardBtn" style="display:none" onclick="resetManagerDashboard()">↻ Réinitialiser</button><button class="btn btnGold" onclick="logout()">Déconnexion</button></div></div><div class="stats">
+<div class="stat"><small>Commandes</small><b id="sOrders">0</b></div><div class="stat"><small>Réservations</small><b id="sBookings">0</b></div><div class="stat"><small>Plats</small><b id="sDishes">0</b></div><div class="stat"><small>Employés</small><b id="sStaff">0</b></div>
+</div></div>
+<div class="tabs"><button class="tab active" data-tab="orders" onclick="adminTab('orders')">📦 Commandes</button><button class="tab" data-tab="bookings" onclick="adminTab('bookings')">📅 Réservations</button><button class="tab" data-tab="dishes" onclick="adminTab('dishes')">🍛 Menu</button><button class="tab managerOnly" data-tab="staff" onclick="adminTab('staff')">👥 Employés</button><button class="tab managerOnly" data-tab="history" onclick="adminTab('history')">🗂️ Historique</button></div><div id="adminContent" class="adminPanel"></div></section>
+<footer><div class="footerInner"><div><h2>dugukla-food-club 🇲🇱</h2><p>Les saveurs de sadiola dans votre assiette.</p></div><div><b>Horaires</b><p>Lun–Dim<br>10h00 — 00h00</p></div><div><b>Contact</b><p>📞 +223 68727877<br>💬 WhatsApp</p></div></div>
+  
+  
+</footer>
+<div class="mobileNav"><button onclick="go('home')">🏠<br>Accueil</button><button onclick="go('menu')">🍛<br>Menu</button><button onclick="openReservation()">📅<br>Réserver</button><button onclick="openCart()">🛒<br>Panier</button><button onclick="openAdmin()">⚙️<br>Gérant</button></div>
+<div id="cartModal" class="modal" onclick="if(event.target===this)closeModal('cartModal')"><div class="modalBox"><div class="modalHead"><h2>🛒 Votre panier</h2><button class="close" onclick="closeModal('cartModal')">×</button></div><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">0 FCFA</span></div><button class="btn btnPrimary" style="width:100%" onclick="openCheckout()">Continuer</button></div></div>
+<div id="checkoutModal" class="modal" onclick="if(event.target===this)closeModal('checkoutModal')"><div class="modalBox"><div class="modalHead"><h2>📦 Finaliser</h2><button class="close" onclick="closeModal('checkoutModal')">×</button></div><form onsubmit="submitOrder(event)" class="formGrid"><div><label>Nom *</label><input id="cName" required></div><div><label>Téléphone *</label><input id="cPhone" required type="tel"></div><div><label>Type *</label><select id="cType"><option>À emporter</option><option>Livraison</option><option>Sur place</option></select></div><div><label>Mode de paiement</label><select id="cPay"><option>À la livraison / sur place</option><option>Espèces</option><option>Orange Money</option><option>Moov Money</option></select></div><div class="full"><label>Adresse / remarque</label><textarea id="cNote" placeholder="Adresse de livraison ou précision..."></textarea></div><div class="full"><button class="btn btnPrimary" style="width:100%">✅ Envoyer la commande</button></div></form></div></div>
+<div id="reservationModal" class="modal" onclick="if(event.target===this)closeModal('reservationModal')"><div class="modalBox"><div class="modalHead"><h2>📅 Réserver une table</h2><button class="close" onclick="closeModal('reservationModal')">×</button></div><form onsubmit="submitBooking(event)" class="formGrid"><div><label>Nom *</label><input id="bName" required></div><div><label>Téléphone *</label><input id="bPhone" required type="tel"></div><div><label>Date *</label><input id="bDate" required type="date"></div><div><label>Heure *</label><input id="bTime" required type="time"></div><div><label>Nombre de personnes *</label><input id="bPeople" required type="number" min="1" max="30" value="2"></div><div class="full"><label>Message</label><textarea id="bNote"></textarea></div><div class="full"><button class="btn btnGold" style="width:100%">📅 Confirmer la réservation</button></div></form></div></div>
+<div id="loginModal" class="modal" onclick="if(event.target===this)closeModal('loginModal')"><div class="modalBox"><div class="modalHead"><h2>🔐 Connexion</h2><button class="close" onclick="closeModal('loginModal')">×</button></div><p class="muted">Connexion sécurisée avec Supabase Auth.</p><form onsubmit="login(event)"><label>Email</label><input id="loginUser" required type="email" autocomplete="username" placeholder="votre@email.com"><label style="margin-top:10px">Mot de passe</label><input id="loginPass" required type="password" autocomplete="current-password"><button class="btn btnPrimary" style="width:100%;margin-top:15px">Se connecter</button></form></div></div>
 <div id="toast" class="toast"></div>
+<script>
+// Le menu réel vient de Supabase. Aucun plat par défaut n'est créé dans le navigateur.
+let dishes=[],orders=load("vk_orders",[]),bookings=load("vk_bookings",[]),orderHistory=load("vk_order_history",[]),bookingHistory=load("vk_booking_history",[]),staff=load("vk_staff",[{id:1,name:"Gérant principal",user:"gerant",role:"Gérant",active:true},{id:2,name:"Employé Démo",user:"employe",role:"Employé",active:true}]),cart=load("vk_cart",[]),currentUser=null,currentCat="Tous",adminCurrent="orders",adminTheme=load("vk_admin_theme","bordeaux");
+
+// Supabase Auth is now the source of truth for professional login.
+async function loadSupabaseProfile(user){
+  if(!user) return null;
+  const {data,error}=await supabaseClient.from("profiles").select("id,first_name,last_name,phone,role,active").eq("id",user.id).single();
+  if(error){ console.error("Profil Supabase:",error); return null; }
+  if(!data.active){ await supabaseClient.auth.signOut(); toast("Ce compte est désactivé."); return null; }
+  const roleLabel = data.role === "gerant" ? "Gérant" : data.role === "employe" ? "Employé" : "Client";
+  if(data.role === "client"){ await supabaseClient.auth.signOut(); toast("Ce compte client ne peut pas ouvrir le dashboard Gérant."); return null; }
+  return { id:data.id, name:[data.first_name,data.last_name].filter(Boolean).join(" ") || user.email, user:user.email, role:roleLabel, active:data.active, email:user.email };
+}
+
+async function restoreSupabaseSession(){
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error){ console.error(error); return; }
+  if(data.session){
+    const profile=await loadSupabaseProfile(data.session.user);
+    if(profile){ currentUser=profile; showAdmin(); }
+  }
+}
+
+async function initSupabaseAuth(){
+  await restoreSupabaseSession();
+  supabaseClient.auth.onAuthStateChange(async (event,session)=>{
+    if(event === "SIGNED_OUT"){ currentUser=null; return; }
+    if((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session && !currentUser){
+      const profile=await loadSupabaseProfile(session.user);
+      if(profile){ currentUser=profile; showAdmin(); }
+    }
+  });
+}
+function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}}function save(k,v){localStorage.setItem(k,JSON.stringify(v))}function money(n){return new Intl.NumberFormat("fr-FR").format(n)+" FCFA"}function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}function go(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});if(id==="menu")renderMenu()}function openModal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}function openCart(){renderCart();openModal("cartModal")}function openReservation(){openModal("reservationModal")}function openAdmin(){if(currentUser)showAdmin();else openModal("loginModal")}
+function renderCategories(){const cats=["Tous",...new Set(dishes.map(d=>d.cat))];document.getElementById("categories").innerHTML=cats.map(c=>`<button class="chip ${currentCat===c?"active":""}" onclick="currentCat='${esc(c)}';renderCategories();renderMenu()">${esc(c)}</button>`).join("")}
+function renderMenu(){renderCategories();const list=dishes.filter(d=>d.available&&(currentCat==="Tous"||d.cat===currentCat));document.getElementById("menuGrid").innerHTML=list.length?list.map(d=>`<article class="card"><div class="foodImg">${d.photo?`<img src="${esc(d.photo)}" alt="${esc(d.name)}" loading="lazy">`:(d.emoji||"🍽️")}</div><div class="cardBody"><span class="badge">${esc(d.cat||"Menu")}</span><h3>${esc(d.name)}</h3>${d.desc?`<p class="muted">${esc(d.desc)}</p>`:""}<div class="cardBottom"><span class="price">${money(d.price)}</span><button class="smallBtn" onclick="addCart('${esc(String(d.id))}')">+ Ajouter</button></div></div></article>`).join(""):`<div class="empty" style="grid-column:1/-1">Aucun plat disponible pour le moment.</div>`}
+function addCart(id){let d=dishes.find(x=>x.id===id);if(!d)return;let item=cart.find(x=>String(x.id)===String(id));item?item.qty++:cart.push({id,qty:1});save("vk_cart",cart);updateCart();toast(d.name+" ajouté au panier")}
+function updateCart(){let n=cart.reduce((s,x)=>s+x.qty,0);document.getElementById("cartCount").textContent=n;document.getElementById("cartCount2").textContent=n}
+function cartTotal(){return cart.reduce((s,x)=>{let d=dishes.find(d=>String(d.id)===String(x.id));return s+(d?d.price*x.qty:0)},0)}
+function renderCart(){const box=document.getElementById("cartItems");if(!cart.length)box.innerHTML='<div class="empty">Votre panier est vide.</div>';else box.innerHTML=cart.map(x=>{let d=dishes.find(z=>String(z.id)===String(x.id));return d?`<div class="orderItem"><div><b>${esc(d.name)}</b><br><span class="muted">${money(d.price)}</span></div><div class="qty"><button onclick="changeQty(${d.id},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${d.id},1)">+</button><button class="close" onclick="removeCart(${d.id})">×</button></div></div>`:""}).join("");document.getElementById("cartTotal").textContent=money(cartTotal())}
+function changeQty(id,n){let x=cart.find(i=>String(i.id)===String(id));if(!x)return;x.qty+=n;if(x.qty<=0)cart=cart.filter(i=>i.id!==id);save("vk_cart",cart);renderCart();updateCart()}function removeCart(id){cart=cart.filter(i=>i.id!==id);save("vk_cart",cart);renderCart();updateCart()}function openCheckout(){if(!cart.length)return toast("Ajoutez au moins un plat.");closeModal("cartModal");openModal("checkoutModal")}
+function submitOrder(e){e.preventDefault();let o={id:"VK-"+Date.now().toString().slice(-6),date:new Date().toLocaleString("fr-FR"),name:cName.value,phone:cPhone.value,type:cType.value,pay:cPay.value,note:cNote.value,items:cart.map(x=>({id:x.id,qty:x.qty})),total:cartTotal(),status:"Nouvelle"};orders.unshift(o);save("vk_orders",orders);cart=[];save("vk_cart",cart);updateCart();closeModal("checkoutModal");e.target.reset();toast("Commande "+o.id+" envoyée avec succès !")}
+function submitBooking(e){e.preventDefault();let b={id:"RES-"+Date.now().toString().slice(-5),name:bName.value,phone:bPhone.value,date:bDate.value,time:bTime.value,people:bPeople.value,note:bNote.value,status:"En attente"};bookings.unshift(b);save("vk_bookings",bookings);closeModal("reservationModal");e.target.reset();toast("Réservation "+b.id+" enregistrée !")}
+async function login(e){
+  e.preventDefault();
+  const email=loginUser.value.trim();
+  const password=loginPass.value;
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){ console.error(error); toast("Connexion impossible : "+error.message); return; }
+  const profile=await loadSupabaseProfile(data.user);
+  if(!profile) return;
+  currentUser=profile;
+  closeModal("loginModal");
+  showAdmin();
+  toast("Bienvenue "+profile.name);
+}
+function showAdmin(){document.getElementById("clientApp").style.display="none";document.getElementById("adminApp").classList.add("show");applyAdminTheme();document.querySelector("footer").style.display="none";document.getElementById("adminRole").textContent=currentUser.role+" • "+currentUser.name;document.querySelectorAll(".managerOnly").forEach(x=>x.style.display=currentUser.role==="Gérant"?"block":"none");if(document.getElementById("themeBtn"))document.getElementById("themeBtn").style.display=currentUser.role==="Gérant"?"inline-block":"none";updateStats();adminTab(adminCurrent);window.scrollTo({top:0,behavior:"smooth"})}
+
+function applyAdminTheme(){const a=document.getElementById("adminApp");a.classList.remove("theme-bordeaux","theme-vert","theme-or","theme-nuit");a.classList.add("theme-"+adminTheme)}
+function openThemePicker(){if(!currentUser||currentUser.role!=="Gérant")return;const names={bordeaux:"Bordeaux",vert:"Vert Mali",or:"Or & Sable",nuit:"Nuit élégante"};const dots={bordeaux:"#7a1f16",vert:"#237a4b",or:"#a97816",nuit:"#334155"};const box=document.createElement("div");box.id="themeModal";box.className="modal show";box.innerHTML=`<div class="modalBox"><div class="modalHead"><h2>🎨 Thème du dashboard</h2><button class="close" onclick="document.getElementById('themeModal').remove()">×</button></div><p class="muted">Le gérant peut choisir l'apparence de son espace de gestion.</p><div class="themeGrid">${Object.keys(names).map(k=>`<button class="themeChoice ${adminTheme===k?"active":""}" onclick="setAdminTheme('${k}')"><span class="themeDot" style="background:${dots[k]}"></span>${names[k]}</button>`).join("")}</div></div>`;document.body.appendChild(box)}
+
+function resetManagerDashboard(){
+  if(!currentUser || currentUser.role!=="Gérant") return;
+  if(!confirm("Réinitialiser l’affichage du tableau de bord ?\n\nCela remet le thème et l’onglet du dashboard par défaut. Les plats, commandes, réservations et employés ne seront PAS supprimés.")) return;
+  adminTheme="bordeaux";
+  save("vk_admin_theme",adminTheme);
+  try{localStorage.removeItem("vk_dashboard_theme")}catch(e){}
+  applyAdminTheme();
+  adminCurrent="orders";
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab==="orders"));
+  if(typeof updateStats==="function") updateStats();
+  if(typeof renderAdminOrders==="function") renderAdminOrders();
+  document.getElementById("themeModal")?.remove();
+  toast("Tableau de bord réinitialisé");
+}
+
+function setAdminTheme(t){if(!currentUser||currentUser.role!=="Gérant")return;adminTheme=t;save("vk_admin_theme",t);applyAdminTheme();document.getElementById("themeModal")?.remove();toast("Thème du dashboard mis à jour")}
+
+async function logout(){
+  await supabaseClient.auth.signOut();
+  currentUser=null;
+  document.getElementById("adminApp").classList.remove("show");
+  document.getElementById("clientApp").style.display="block";
+  document.querySelector("footer").style.display="block";
+  go("home");
+}
+function updateStats(){sOrders.textContent=orders.length;sBookings.textContent=bookings.length;sDishes.textContent=dishes.filter(x=>x.available).length;sStaff.textContent=staff.filter(x=>x.active).length}
+function adminTab(tab){adminCurrent=tab;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));if(tab==="orders")renderAdminOrders();if(tab==="bookings")renderAdminBookings();if(tab==="dishes")renderAdminDishes();if(tab==="staff")renderAdminStaff();if(tab==="history")renderAdminHistory()}
+function statusClass(s){return s==="Livrée"||s==="Prête"?"success":s==="Annulée"?"danger":""}
+function renderAdminOrders(){let c=document.getElementById("adminContent");c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3>📦 Commandes (${orders.length})</h3>${currentUser&&currentUser.role==="Gérant"?`<button class="btn btnLight" onclick="archiveWeeklyData()">🗂️ Archiver la semaine</button>`:""}</div>${orders.length?orders.map(o=>`<div class="adminRow"><div><b>${esc(o.id)} — ${esc(o.name)}</b><br><span class="muted">${esc(o.phone)} • ${esc(o.type)} • ${money(o.total)}</span><br><small>${o.date}</small></div><div class="adminActions"><span class="btn ${statusClass(o.status)}">${esc(o.status)}</span><select onchange="setOrderStatus('${o.id}',this.value)">${["Nouvelle","Confirmée","En préparation","Prête","Livrée","Annulée"].map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select><button class="btn btnLight" onclick="viewOrder('${o.id}')">Détails</button></div></div>`).join(""):'<div class="empty">Aucune commande.</div>'}`}
+function viewOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;let names=o.items.map(x=>{let d=dishes.find(z=>String(z.id)===String(x.id));return `${x.qty} × ${d?d.name:"Plat supprimé"}`}).join("\n");alert(`Commande ${o.id}\nClient: ${o.name}\nTéléphone: ${o.phone}\nType: ${o.type}\n\n${names}\n\nTotal: ${money(o.total)}\nRemarque: ${o.note||"—"}`)}
+function setOrderStatus(id,s){let o=orders.find(x=>x.id===id);if(o){o.status=s;save("vk_orders",orders);renderAdminOrders();toast("Statut mis à jour")}}
+function renderAdminBookings(){document.getElementById("adminContent").innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3>📅 Réservations (${bookings.length})</h3>${currentUser&&currentUser.role==="Gérant"?`<button class="btn btnLight" onclick="archiveWeeklyData()">🗂️ Archiver la semaine</button>`:""}</div>${bookings.length?bookings.map(b=>`<div class="adminRow"><div><b>${esc(b.id)} — ${esc(b.name)}</b><br><span class="muted">${esc(b.date)} à ${esc(b.time)} • ${esc(b.people)} personne(s)</span><br>📞 ${esc(b.phone)} ${b.note?"• "+esc(b.note):""}</div><div class="adminActions"><select onchange="setBookingStatus('${b.id}',this.value)">${["En attente","Confirmée","Terminée","Annulée"].map(s=>`<option ${s===b.status?"selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):'<div class="empty">Aucune réservation.</div>'}`}
+function setBookingStatus(id,s){let b=bookings.find(x=>x.id===id);if(b){b.status=s;save("vk_bookings",bookings);renderAdminBookings();toast("Réservation mise à jour")}}
+
+function weekLabel(d=new Date()){
+  const date=new Date(d);
+  const day=date.getDay()||7;
+  const monday=new Date(date);
+  monday.setDate(date.getDate()-day+1);
+  const sunday=new Date(monday);
+  sunday.setDate(monday.getDate()+6);
+  const f=x=>x.toLocaleDateString("fr-FR");
+  return `${f(monday)} → ${f(sunday)}`;
+}
+function archiveWeeklyData(){
+  if(!currentUser||currentUser.role!=="Gérant") return;
+  if(!orders.length&&!bookings.length) return toast("Il n’y a rien à archiver.");
+  const label=weekLabel();
+  if(!confirm(`Archiver les ${orders.length} commande(s) et ${bookings.length} réservation(s) actuelles ?\n\nElles seront retirées des listes actives, mais conservées dans l’historique avec le client, la date et les détails.`)) return;
+  const archivedAt=new Date().toLocaleString("fr-FR");
+  orders.forEach(o=>orderHistory.unshift({...o,archivedAt,archiveWeek:label}));
+  bookings.forEach(b=>bookingHistory.unshift({...b,archivedAt,archiveWeek:label}));
+  save("vk_order_history",orderHistory);
+  save("vk_booking_history",bookingHistory);
+  orders=[]; bookings=[];
+  save("vk_orders",orders); save("vk_bookings",bookings);
+  updateStats();
+  adminTab(adminCurrent==="bookings"?"bookings":"orders");
+  toast("Commandes et réservations archivées.");
+}
+function renderAdminHistory(){
+  if(!currentUser||currentUser.role!=="Gérant") return;
+  const c=document.getElementById("adminContent");
+  c.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h3>🗂️ Historique</h3>
+      <button class="btn btnLight" onclick="adminTab('orders')">← Retour</button>
+    </div>
+    <p class="muted">Les archives conservent le client, le téléphone, la date, le contenu de la commande ou de la réservation et la date d’archivage.</p>
+    <div class="historyGrid">
+      <div>
+        <h4>📦 Commandes archivées (${orderHistory.length})</h4>
+        ${orderHistory.length?orderHistory.map(o=>`
+          <div class="adminRow">
+            <div><b>${esc(o.id)} — ${esc(o.name)}</b><br>
+            <span class="muted">📞 ${esc(o.phone)} • ${money(o.total)}</span><br>
+            <small>Commande : ${esc(o.date)} • Archivée : ${esc(o.archivedAt||"—")}</small></div>
+            <div class="adminActions"><button class="btn btnLight" onclick="viewHistoryOrder('${o.id}')">Détails</button></div>
+          </div>`).join(""):'<div class="empty">Aucune commande archivée.</div>'}
+      </div>
+      <div>
+        <h4>📅 Réservations archivées (${bookingHistory.length})</h4>
+        ${bookingHistory.length?bookingHistory.map(b=>`
+          <div class="adminRow">
+            <div><b>${esc(b.id)} — ${esc(b.name)}</b><br>
+            <span class="muted">📞 ${esc(b.phone)} • ${esc(b.date)} à ${esc(b.time)} • ${esc(b.people)} personne(s)</span><br>
+            <small>Archivée : ${esc(b.archivedAt||"—")}</small></div>
+          </div>`).join(""):'<div class="empty">Aucune réservation archivée.</div>'}
+      </div>
+    </div>`;
+}
+function viewHistoryOrder(id){
+  const o=orderHistory.find(x=>x.id===id); if(!o)return;
+  const names=(o.items||[]).map(x=>{const d=dishes.find(z=>String(z.id)===String(x.id));return `${x.qty} × ${d?d.name:"Plat supprimé"}`}).join("\n");
+  alert(`Commande ${o.id}\nClient: ${o.name}\nTéléphone: ${o.phone}\nDate: ${o.date}\nType: ${o.type}\n\n${names||"Détails non disponibles"}\n\nTotal: ${money(o.total)}\nRemarque: ${o.note||"—"}\nArchivée: ${o.archivedAt||"—"}`);
+}
+
+function renderAdminDishes(){
+  const c=document.getElementById("adminContent");
+  if(!currentUser || currentUser.role!=="Gérant"){
+    c.innerHTML='<div class="empty">Seul le gérant peut gérer les plats.</div>';
+    return;
+  }
+  c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><h3 style="margin:0">🍛 Gestion du menu</h3><small class="muted">Les plats affichés ici viennent directement de Supabase.</small></div><button class="btn btnPrimary" onclick="dishForm()">+ Nouveau plat</button></div><div id="dishList">${dishes.length?dishes.map(d=>`<div class="adminRow"><div class="adminDishInfo">${d.photo?`<img class="adminDishThumb" src="${esc(d.photo)}" alt="${esc(d.name)}">`:`<div class="adminDishThumb" style="display:grid;place-items:center;font-size:34px">${d.emoji||"🍽️"}</div>`}<div><b>${esc(d.name)}</b><br><span class="muted">${esc(d.cat||"Menu")} • ${money(d.price)} • ${d.available?"Disponible":"Indisponible"}</span></div></div><div class="adminActions"><button class="btn btnLight" onclick="dishForm('${esc(String(d.id))}')">Modifier</button><button class="btn ${d.available?"danger":"success"}" onclick="toggleDish('${esc(String(d.id))}')">${d.available?"Désactiver":"Activer"}</button><button class="btn danger" onclick="deleteDish('${esc(String(d.id))}')">Supprimer</button></div></div>`).join(""):'<div class="empty">Aucun plat enregistré. Ajoute le premier plat depuis « + Nouveau plat ».</div>'}</div>`;
+}
+
+function dishForm(id=null){
+  if(!currentUser || currentUser.role!=="Gérant") return toast("Seul le gérant peut ajouter ou modifier un plat.");
+  const d=id?dishes.find(x=>String(x.id)===String(id)):null;
+  if(id&&!d) return toast("Plat introuvable.");
+  const x=d||{name:"",cat:"Plats maliens",price:"",emoji:"🍽️",photo:"",desc:"",available:true};
+  const html=`<div class="modal show" id="tempDish"><div class="modalBox"><div class="modalHead"><h2>${id?"Modifier":"Ajouter"} un plat</h2><button class="close" onclick="document.getElementById('tempDish').remove()">×</button></div><form onsubmit="saveDish(event,${id?`'${esc(String(id))}'`:"null"})" class="formGrid"><div class="full"><label>Nom du plat *</label><input id="dName" required maxlength="120" value="${esc(x.name)}" placeholder="Ex. Tigadèguèna"></div><div class="full"><label>Prix (FCFA) *</label><input id="dPrice" type="number" min="0" step="1" required value="${x.price}" placeholder="Ex. 3500"></div><div><label>Catégorie</label><input id="dCat" maxlength="80" value="${esc(x.cat||"Plats maliens")}"></div><div><label>Description</label><input id="dDesc" maxlength="500" value="${esc(x.desc||"")}"></div><div class="full"><label>Photo du plat (optionnelle)</label><input id="dPhoto" type="file" accept="image/jpeg,image/png,image/webp" onchange="previewDishPhoto(event)"><div style="display:flex;gap:12px;align-items:center;margin-top:10px">${x.photo?`<img id="dishPreview" class="dishPhotoPreview" src="${esc(x.photo)}" alt="Aperçu">`:`<div id="dishPreview" class="dishPhotoPreview" style="display:grid;place-items:center;font-size:13px;text-align:center;padding:8px">Aucune photo</div>`}<div class="muted" style="font-size:13px">La photo sera stockée dans Supabase Storage.</div></div></div><div class="full"><button class="btn btnPrimary" style="width:100%">Enregistrer dans Supabase</button></div></form></div></div>`;
+  document.body.insertAdjacentHTML("beforeend",html);
+}
+
+function previewDishPhoto(e){
+  const f=e.target.files&&e.target.files[0];
+  if(!f)return;
+  if(!f.type.startsWith("image/"))return toast("Choisis une image.");
+  if(f.size>12*1024*1024)return toast("Photo trop lourde : maximum 12 Mo.");
+  const r=new FileReader();
+  r.onload=()=>{const p=document.getElementById("dishPreview");if(p)p.outerHTML=`<img id="dishPreview" class="dishPhotoPreview" src="${r.result}" alt="Aperçu">`};
+  r.readAsDataURL(f);
+}
+
+async function uploadDishPhoto(file){
+  if(!file)return null;
+  const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+  const path=`${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+  const {error}=await supabaseClient.storage.from("menu-images").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+  if(error)throw error;
+  const {data}=supabaseClient.storage.from("menu-images").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+async function saveDish(e,id){
+  e.preventDefault();
+  if(!currentUser || currentUser.role!=="Gérant")return toast("Action réservée au gérant.");
+  const name=document.getElementById("dName").value.trim();
+  const price=Number(document.getElementById("dPrice").value);
+  const cat=document.getElementById("dCat").value.trim()||"Plats maliens";
+  const desc=document.getElementById("dDesc").value.trim();
+  const file=document.getElementById("dPhoto")?.files?.[0];
+  if(!name||!Number.isFinite(price)||price<0)return toast("Nom et prix sont obligatoires.");
+  const old=id?dishes.find(d=>String(d.id)===String(id)):null;
+  const btn=e.target.querySelector("button[type=submit]");
+  if(btn){btn.disabled=true;btn.textContent="Enregistrement…";}
+  try{
+    // On récupère directement l'UUID de l'utilisateur authentifié.
+    // UUID de la session Supabase authentifiée.
+    const {data:authData,error:authError}=await supabaseClient.auth.getUser();
+    if(authError || !authData?.user?.id){
+      throw new Error("Session Supabase introuvable. Déconnecte-toi puis reconnecte-toi.");
+    }
+    const authUserId=authData.user.id;
+
+    // Vérification du profil Gérant actif avant l'insertion.
+    const {data:profileCheck,error:profileError}=await supabaseClient
+      .from("profiles")
+      .select("id,role,active")
+      .eq("id",authUserId)
+      .single();
+    if(profileError){
+      throw new Error("Impossible de vérifier le profil Gérant : "+profileError.message);
+    }
+    if(profileCheck.role!=="gerant" || profileCheck.active===false){
+      throw new Error("Ce compte n'a pas le rôle Gérant actif dans Supabase.");
+    }
+
+    let photo=old?.photo||"";
+    if(file)photo=await uploadDishPhoto(file);
+    const payload={
+      name,
+      category:cat,
+      price,
+      description:desc,
+      emoji:"🍽️",
+      photo_url:photo||null,
+      available:old?old.available:true
+    };
+
+    let result;
+    if(id){
+      result=await supabaseClient
+        .from("menu_items")
+        .update(payload)
+        .eq("id",id)
+        .select("*")
+        .single();
+    }else{
+      // Ancienne méthode directe conservée pour compatibilité; le saveDish final utilise le RPC sécurisé.
+      result=await supabaseClient
+        .from("menu_items")
+        .insert(payload)
+        .select("*")
+        .single();
+    }
+
+    if(result.error)throw result.error;
+    await loadSupabaseMenu();
+    document.getElementById("tempDish")?.remove();
+    renderAdminDishes();
+    updateStats();
+    renderMenu();
+    toast(id?"Plat modifié avec succès.":"Plat ajouté avec succès.");
+  }catch(err){
+    console.error("Supabase menu:",err);
+    toast("Impossible d'enregistrer le plat : "+(err.message||"erreur Supabase"));
+    if(btn){btn.disabled=false;btn.textContent="Enregistrer dans Supabase";}
+  }
+}
+
+async function toggleDish(id){
+  if(!currentUser || currentUser.role!=="Gérant")return toast("Action réservée au gérant.");
+  const d=dishes.find(x=>String(x.id)===String(id)); if(!d)return;
+  const next=!d.available;
+  const {error}=await supabaseClient.from("menu_items").update({available:next}).eq("id",id);
+  if(error)return toast("Impossible de changer la disponibilité : "+error.message);
+  await loadSupabaseMenu();renderAdminDishes();updateStats();renderMenu();
+  toast(next?"Plat activé.":"Plat désactivé.");
+}
+
+async function deleteDish(id){
+  if(!currentUser || currentUser.role!=="Gérant")return toast("Action réservée au gérant.");
+  const d=dishes.find(x=>String(x.id)===String(id)); if(!d)return;
+  if(!confirm(`Supprimer définitivement « ${d.name} » ?`))return;
+  const {error}=await supabaseClient.from("menu_items").delete().eq("id",id);
+  if(error)return toast("Impossible de supprimer le plat : "+error.message);
+  await loadSupabaseMenu();renderAdminDishes();updateStats();renderMenu();
+  toast("Plat supprimé.");
+}
+function renderAdminStaff(){if(currentUser.role!=="Gérant")return;document.getElementById("adminContent").innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>👥 Gestion des employés</h3><button class="btn btnPrimary" onclick="staffForm()">+ Ajouter</button></div>${staff.map(s=>`<div class="adminRow"><div><b>${esc(s.name)}</b><br><span class="muted">@${esc(s.user)} • ${esc(s.role)} • ${s.active?"Actif":"Désactivé"}</span></div><div class="adminActions"><button class="btn ${s.active?"danger":"success"}" onclick="toggleStaff(${s.id})">${s.active?"Désactiver":"Activer"}</button>${s.id!==1?`<button class="btn danger" onclick="deleteStaff(${s.id})">Supprimer</button>`:""}</div></div>`).join("")}`}
+function staffForm(){let html=`<div class="modal show" id="tempStaff"><div class="modalBox"><div class="modalHead"><h2>Ajouter un employé</h2><button class="close" onclick="document.getElementById('tempStaff').remove()">×</button></div><form onsubmit="saveStaff(event)"><label>Nom</label><input id="stName" required><label style="margin-top:10px">Identifiant</label><input id="stUser" required><label style="margin-top:10px">Mot de passe</label><input id="stPass" required type="password"><label style="margin-top:10px">Rôle</label><select id="stRole"><option>Employé</option><option>Gérant</option></select><button class="btn btnPrimary" style="width:100%;margin-top:15px">Créer le compte</button></form></div></div>`;document.body.insertAdjacentHTML("beforeend",html)}
+function saveStaff(e){e.preventDefault();let s={id:Date.now(),name:stName.value,user:stUser.value,role:stRole.value,active:true};if(staff.some(x=>x.user===s.user))return toast("Cet identifiant existe déjà");staff.push(s);save("vk_staff",staff);document.getElementById("tempStaff").remove();renderAdminStaff();updateStats();toast("Compte employé créé")}
+function toggleStaff(id){let s=staff.find(x=>x.id===id);if(s){s.active=!s.active;save("vk_staff",staff);renderAdminStaff();updateStats()}}
+function deleteStaff(id){if(!confirm("Supprimer ce compte employé ?"))return;staff=staff.filter(x=>x.id!==id);save("vk_staff",staff);renderAdminStaff();updateStats();toast("Compte supprimé")}
+renderMenu();updateCart();
+</script>
 
 <script>
-const defaultDishes=[
-{id:1,name:"Tigadèguèna",cat:"Plats maliens",price:3500,emoji:"🍲",desc:"Sauce arachide malienne, généreuse et parfumée.",available:true},
-{id:2,name:"Riz au gras",cat:"Plats maliens",price:3000,emoji:"🍚",desc:"Riz savoureux accompagné de viande et légumes.",available:true},
-{id:3,name:"Tô & sauce",cat:"Plats maliens",price:2500,emoji:"🥘",desc:"Tô traditionnel avec une sauce au choix.",available:true},
-{id:4,name:"Poulet braisé",cat:"Grillades",price:5000,emoji:"🍗",desc:"Poulet grillé aux épices.",available:true},
-{id:5,name:"Brochettes",cat:"Grillades",price:4000,emoji:"🍢",desc:"Brochettes de viande grillée.",available:true},
-{id:6,name:"Attiéké",cat:"Riz et accompagnements",price:2500,emoji:"🥗",desc:"Accompagnement frais et savoureux.",available:true},
-{id:7,name:"Jus de bissap",cat:"Boissons",price:1000,emoji:"🧃",desc:"Bissap frais maison.",available:true},
-{id:8,name:"Gingembre",cat:"Boissons",price:1000,emoji:"🥤",desc:"Jus de gingembre frais.",available:true},
-{id:9,name:"Salade de fruits",cat:"Desserts",price:1500,emoji:"🍉",desc:"Fruits frais de saison.",available:true}];
+/* V2 PATCH: reliable manager actions + dashboard theme selector */
+(function(){
+  const VK_THEME_KEY = "vk_dashboard_theme";
 
-let dishes=defaultDishes,orders=[],bookings=[],cart=load("vk_cart",[]),orderHistory=load("vk_order_history",[]),bookingHistory=load("vk_booking_history",[]),currentUser=null,currentCat="Tous";
+  function applyDashboardTheme(theme){
+    document.documentElement.dataset.dashboardTheme = theme || "bordeaux";
+    localStorage.setItem(VK_THEME_KEY, theme || "bordeaux");
+  }
 
-function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function money(n){return new Intl.NumberFormat("fr-FR").format(Number(n)||0)+" FCFA"}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
-function go(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});if(id==="menu")renderMenu()}
-function openModal(id){document.getElementById(id)?.classList.add("show")}
-function closeModal(id){document.getElementById(id)?.classList.remove("show")}
-function openCart(){renderCart();openModal("cartModal")}
-function openReservation(){openModal("reservationModal")}
-function openAdmin(){currentUser?showAdmin():openModal("loginModal")}
+  function ensureThemeStyles(){
+    if(document.getElementById("vkThemePatch")) return;
+    const s=document.createElement("style");
+    s.id="vkThemePatch";
+    s.textContent=`
+      html[data-dashboard-theme="bordeaux"] .admin{--theme:#7a1f2b;--theme2:#a83b4b}
+      html[data-dashboard-theme="vert"] .admin{--theme:#087f5b;--theme2:#16a085}
+      html[data-dashboard-theme="or"] .admin{--theme:#b8860b;--theme2:#d4a017}
+      html[data-dashboard-theme="nuit"] .admin{--theme:#273449;--theme2:#4b6584}
+      .vk-theme-box{margin:12px 0;padding:14px;border:1px solid #ddd;border-radius:14px;background:#fff}
+      .vk-theme-box label{display:block;font-weight:700;margin-bottom:7px}
+      .vk-theme-box select{width:100%;padding:10px;border-radius:10px;border:1px solid #ccc}
+      .admin .vk-theme-box{border-left:5px solid var(--theme,#7a1f2b)}
+      .adminDishActions button{min-width:88px}
+    `;
+    document.head.appendChild(s);
+  }
 
-function renderMenu(){
- const cats=["Tous",...new Set(dishes.map(d=>d.cat))];
- document.getElementById("cats").innerHTML=cats.map(c=>`<button class="chip ${currentCat===c?"active":""}" onclick="currentCat='${esc(c)}';renderMenu()">${esc(c)}</button>`).join("");
- const list=dishes.filter(d=>d.available&&(currentCat==="Tous"||d.cat===currentCat));
- document.getElementById("grid").innerHTML=list.length?list.map(d=>`<article class="card"><div class="food">${d.photo?`<img src="${esc(d.photo)}" alt="${esc(d.name)}">`:(d.emoji||"🍽️")}</div><div class="body"><span class="badge">${esc(d.cat)}</span><h3>${esc(d.name)}</h3><p class="muted">${esc(d.desc)}</p><div class="bottom"><span class="price">${money(d.price)}</span><button class="small" onclick="addCart('${esc(String(d.id))}')">+ Ajouter</button></div></div></article>`).join(""):`<div class="empty">Aucun plat disponible.</div>`;
-}
-function addCart(id){const d=dishes.find(x=>String(x.id)===String(id));if(!d)return;const i=cart.find(x=>String(x.id)===String(id));i?i.qty++:cart.push({id:d.id,qty:1});save("vk_cart",cart);updateCart();toast(d.name+" ajouté au panier")}
-function updateCart(){const n=cart.reduce((a,x)=>a+x.qty,0);cartCount.textContent=n;cartCount2.textContent=n}
-function cartTotal(){return cart.reduce((a,x)=>{const d=dishes.find(y=>String(y.id)===String(x.id));return a+(d?Number(d.price)*x.qty:0)},0)}
-function renderCart(){cartItems.innerHTML=cart.length?cart.map(x=>{const d=dishes.find(y=>String(y.id)===String(x.id));return d?`<div class="item"><b>${esc(d.name)}<br><span class="muted">${money(d.price)}</span></b><div class="qty"><button onclick="changeQty('${esc(String(d.id))}',-1)">−</button><b>${x.qty}</b><button onclick="changeQty('${esc(String(d.id))}',1)">+</button><button onclick="removeCart('${esc(String(d.id))}')">×</button></div></div>`:""}).join(""):`<div class="empty">Votre panier est vide.</div>`;cartTotalEl();function cartTotalEl(){document.getElementById("cartTotal").textContent=money(cartTotal())}}
-function changeQty(id,n){const x=cart.find(i=>String(i.id)===String(id));if(!x)return;x.qty+=n;if(x.qty<=0)cart=cart.filter(i=>String(i.id)!==String(id));save("vk_cart",cart);renderCart();updateCart()}
-function removeCart(id){cart=cart.filter(i=>String(i.id)!==String(id));save("vk_cart",cart);renderCart();updateCart()}
-function openCheckout(){if(!cart.length)return toast("Ajoutez au moins un plat.");closeModal("cartModal");openModal("checkoutModal")}
+  function addThemeBox(){
+    if(document.getElementById("vkThemeBox")) return;
+    const admin = document.querySelector(".admin");
+    if(!admin) return;
+    ensureThemeStyles();
+    const box=document.createElement("div");
+    box.id="vkThemeBox";
+    box.className="vk-theme-box";
+    box.innerHTML=`
+      <label>🎨 Thème du dashboard</label>
+      <select id="vkThemeSelect">
+        <option value="bordeaux">Bordeaux</option>
+        <option value="vert">Vert Mali</option>
+        <option value="or">Or & Sable</option>
+        <option value="nuit">Nuit élégante</option>
+      </select>`;
+    admin.insertBefore(box, admin.firstChild);
+    const saved=localStorage.getItem(VK_THEME_KEY)||"bordeaux";
+    box.querySelector("select").value=saved;
+    applyDashboardTheme(saved);
+    box.querySelector("select").addEventListener("change",e=>applyDashboardTheme(e.target.value));
+  }
 
-async function loadDishesFromSupabase(){
- try{
-  const {data,error}=await supabaseClient.from("dishes").select("*").order("created_at",{ascending:true});
-  if(error)throw error;
-  dishes=(data||[]).map(d=>({id:d.id,name:d.name||"",cat:d.category||"Autres",price:Number(d.price)||0,photo:d.image_url||"",desc:d.description||"",available:d.available!==false,emoji:"🍽️"}));
-  renderMenu();updateStats();
- }catch(e){console.error(e);toast("Impossible de charger le menu Supabase.")}
-}
+  function patchButtons(){
+    document.addEventListener("click", function(e){
+      const btn=e.target.closest("[data-vk-action]");
+      if(!btn) return;
+      const action=btn.dataset.vkAction;
+      const id=btn.dataset.vkId;
+      if(!id) return;
+      e.preventDefault();
+      e.stopPropagation();
 
-async function submitOrder(e){
- e.preventDefault();if(!cart.length)return toast("Panier vide.");
- const payload={customer_name:cName.value.trim(),phone:cPhone.value.trim(),address:cNote.value.trim(),delivery_type:cType.value,status:"Nouvelle",total:cartTotal(),notes:cPay.value};
- try{
-  const {data,error}=await supabaseClient.from("orders").insert(payload).select().single();if(error)throw error;
-  const rows=cart.map(x=>{const d=dishes.find(y=>String(y.id)===String(x.id));return {order_id:data.id,dish_id:d.id,quantity:x.qty,unit_price:Number(d.price)||0}});
-  const r=await supabaseClient.from("order_items").insert(rows);if(r.error)throw r.error;
-  orders.unshift({id:data.id,name:data.customer_name,phone:data.phone,type:data.delivery_type,total:data.total,status:data.status,date:data.created_at,note:data.notes,items:cart.map(x=>({id:x.id,qty:x.qty}))});
-  cart=[];save("vk_cart",cart);updateCart();closeModal("checkoutModal");e.target.reset();toast("Commande envoyée avec succès !");
- }catch(err){console.error(err);toast("Impossible d'envoyer la commande.")}
-}
+      // Use the existing global dish array when available.
+      if(!Array.isArray(window.dishes)) return;
 
-async function submitBooking(e){
- e.preventDefault();
- const payload={reservation_number:"RES-"+Date.now().toString().slice(-6),customer:bName.value.trim(),customer_phone:bPhone.value.trim(),reservation_date:bDate.value,reservation_time:bTime.value,phone:Number(String(bPhone.value).replace(/\D/g,"").slice(0,9))||0,note:bNote.value.trim(),status:"En attente"};
- try{
-  const {data,error}=await supabaseClient.from("reservations").insert(payload).select().single();if(error)throw error;
-  bookings.unshift({id:data.id,reservation_number:data.reservation_number,name:data.customer,phone:data.customer_phone,date:data.reservation_date,time:data.reservation_time,people:bPeople.value,note:data.note,status:data.status});
-  closeModal("reservationModal");e.target.reset();toast("Réservation enregistrée !");
- }catch(err){console.error(err);toast("Impossible d'enregistrer la réservation.")}
-}
+      const dish=window.dishes.find(d=>String(d.id)===String(id));
+      if(!dish) return;
 
-async function login(e){
- e.preventDefault();
- try{
-  const {data,error}=await supabaseClient.auth.signInWithPassword({email:loginEmail.value.trim(),password:loginPass.value});if(error)throw error;
-  const r=await supabaseClient.from("profiles").select("*").eq("id",data.user.id).single();if(r.error)throw r.error;
-  if(r.data.active===false)throw new Error("Compte désactivé");
-  currentUser=r.data;closeModal("loginModal");showAdmin();toast("Bienvenue "+(r.data.name||""));
- }catch(err){console.error(err);toast("Identifiants incorrects ou compte non autorisé.")}
-}
-async function logout(){await supabaseClient.auth.signOut();currentUser=null;admin.classList.remove("show");client.style.display="block";footer.style.display="block";go("home")}
-function showAdmin(){client.style.display="none";admin.classList.add("show");footer.style.display="none";role.textContent=(currentUser.role||"")+" • "+(currentUser.name||"");document.querySelectorAll(".manager").forEach(x=>x.style.display=currentUser.role==="Gérant"?"block":"none");updateStats();adminTab("orders");window.scrollTo(0,0)}
-function updateStats(){sOrders.textContent=orders.length;sBookings.textContent=bookings.length;sDishes.textContent=dishes.filter(x=>x.available).length;sStaff.textContent="—"}
-function adminTab(t){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));event?.target?.classList.add("active");if(t==="orders")renderOrders();if(t==="bookings")renderBookings();if(t==="dishes")renderDishes();if(t==="history")renderHistory()}
-function renderOrders(){adminContent.innerHTML=`<h3>📦 Commandes (${orders.length})</h3>${orders.length?orders.map(o=>`<div class="row"><div><b>${esc(o.id)} — ${esc(o.name)}</b><br>${esc(o.phone)} • ${esc(o.type)} • ${money(o.total)}<br><small>${esc(o.date)}</small></div><div class="actions2"><select onchange="setOrderStatus('${esc(String(o.id))}',this.value)">${["Nouvelle","Confirmée","En préparation","Prête","Livrée","Annulée"].map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select></div></div>`).join(""):`<div class="empty">Aucune commande.</div>`}`}
-async function setOrderStatus(id,s){const o=orders.find(x=>String(x.id)===String(id));if(!o)return;o.status=s;try{await supabaseClient.from("orders").update({status:s}).eq("id",o.id)}catch(e){console.error(e)}renderOrders()}
-function renderBookings(){adminContent.innerHTML=`<h3>📅 Réservations (${bookings.length})</h3>${bookings.length?bookings.map(b=>`<div class="row"><div><b>${esc(b.reservation_number||b.id)} — ${esc(b.name)}</b><br>${esc(b.date)} à ${esc(b.time)} • ${esc(b.people||"?")} personne(s)<br>📞 ${esc(b.phone||"")}</div><select onchange="setBookingStatus('${esc(String(b.id))}',this.value)">${["En attente","Confirmée","Terminée","Annulée"].map(s=>`<option ${s===b.status?"selected":""}>${s}</option>`).join("")}</select></div>`).join(""):`<div class="empty">Aucune réservation.</div>`}`}
-async function setBookingStatus(id,s){const b=bookings.find(x=>String(x.id)===String(id));if(!b)return;b.status=s;await supabaseClient.from("reservations").update({status:s}).eq("id",b.id);renderBookings()}
-function renderHistory(){adminContent.innerHTML=`<h3>🗂️ Historique local</h3><p class="muted">Anciennes archives du navigateur : ${orderHistory.length} commande(s), ${bookingHistory.length} réservation(s).</p>`}
+      // Les actions de menu sont maintenant gérées exclusivement par les fonctions
+      // Supabase saveDish(), toggleDish() et deleteDish(), avec RLS côté serveur.
+      if(action==="toggle" || action==="delete") return;
+    }, true);
+  }
 
-function renderDishes(){adminContent.innerHTML=`<div class="head"><h3>🍛 Gestion du menu</h3><button class="btn primary" onclick="dishForm()">+ Nouveau plat</button></div>${dishes.map(d=>`<div class="row"><div><b>${esc(d.name)}</b><br>${esc(d.cat)} • ${money(d.price)} • ${d.available?"Disponible":"Indisponible"}</div><div class="actions2"><button class="btn light" onclick="dishForm('${esc(String(d.id))}')">Modifier</button><button class="btn ${d.available?"danger":"success"}" onclick="toggleDish('${esc(String(d.id))}')">${d.available?"Désactiver":"Activer"}</button><button class="btn danger" onclick="deleteDish('${esc(String(d.id))}')">Supprimer</button></div></div>`).join("")}`}
-function dishForm(id=null){const d=id?dishes.find(x=>String(x.id)===String(id)):{name:"",cat:"Plats maliens",price:0,desc:"",photo:"",available:true};if(!d)return;document.body.insertAdjacentHTML("beforeend",`<div class="modal show" id="dishModal"><div class="modalbox"><div class="modalhead"><h2>${id?"Modifier":"Ajouter"} un plat</h2><button class="close" onclick="dishModal.remove()">×</button></div><form id="dishForm" class="form"><div><label>Nom</label><input id="dName" required value="${esc(d.name)}"></div><div><label>Prix</label><input id="dPrice" type="number" required value="${d.price}"></div><div><label>Catégorie</label><input id="dCat" required value="${esc(d.cat)}"></div><div class="full"><label>Photo</label><input id="dPhoto" type="file" accept="image/*"></div><div class="full"><label>Description</label><textarea id="dDesc">${esc(d.desc)}</textarea></div><div class="full"><button class="btn primary" style="width:100%">Enregistrer</button></div></form></div></div>`);dishForm.onsubmit=e=>saveDish(e,id)}
-async function saveDish(e,id){e.preventDefault();const file=dPhoto.files[0];let image=id?(dishes.find(x=>String(x.id)===String(id))?.photo||""):"";if(file){image=await resize(file)}const payload={name:dName.value.trim(),description:dDesc.value.trim(),category:dCat.value.trim(),price:Number(dPrice.value)||0,image_url:image,available:id?dishes.find(x=>String(x.id)===String(id)).available:true};try{if(id){const r=await supabaseClient.from("dishes").update(payload).eq("id",id).select().single();if(r.error)throw r.error}else{const r=await supabaseClient.from("dishes").insert(payload).select().single();if(r.error)throw r.error}dishModal.remove();await loadDishesFromSupabase();toast("Plat enregistré dans Supabase.")}catch(err){console.error(err);toast("Impossible d'enregistrer le plat.")}}
-function resize(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const max=900,s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",.78))};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
-async function toggleDish(id){const d=dishes.find(x=>String(x.id)===String(id));if(!d)return;const n=!d.available;const r=await supabaseClient.from("dishes").update({available:n}).eq("id",d.id);if(r.error)return toast("Erreur Supabase.");d.available=n;renderDishes();renderMenu();updateStats()}
-async function deleteDish(id){const d=dishes.find(x=>String(x.id)===String(id));if(!d||!confirm("Supprimer définitivement ce plat ?"))return;const r=await supabaseClient.from("dishes").delete().eq("id",d.id);if(r.error)return toast("Erreur Supabase.");dishes=dishes.filter(x=>String(x.id)!==String(id));renderDishes();renderMenu();updateStats()}
+  function patchDishRows(){
+    // Rebuild action buttons after each admin render, without touching the rest of V2.
+    const rows=document.querySelectorAll("[data-dish-id]");
+    rows.forEach(row=>{
+      const id=row.getAttribute("data-dish-id");
+      if(!id || row.dataset.vkPatched==="1") return;
+      row.dataset.vkPatched="1";
+      const old=row.querySelectorAll("button");
+      old.forEach(b=>{
+        const txt=(b.textContent||"").toLowerCase();
+        if(txt.includes("désactiv") || txt.includes("desactiv") || txt.includes("activ")){
+          b.type="button";
+          b.dataset.vkAction="toggle";
+          b.dataset.vkId=id;
+        }
+        if(txt.includes("supprim") || txt.includes("delete")){
+          b.type="button";
+          b.dataset.vkAction="delete";
+          b.dataset.vkId=id;
+        }
+      });
+    });
+  }
 
-checkoutForm.onsubmit=submitOrder;
-reservationForm.onsubmit=submitBooking;
-loginForm.onsubmit=login;
-renderMenu();updateCart();loadDishesFromSupabase();
+  // Observe admin rerenders.
+  const obs=new MutationObserver(()=>{ addThemeBox(); patchDishRows(); });
+  obs.observe(document.documentElement,{childList:true,subtree:true});
+
+  window.addEventListener("DOMContentLoaded",()=>{
+    initSupabaseAuth();
+    ensureThemeStyles();
+    addThemeBox();
+    patchButtons();
+    patchDishRows();
+    applyDashboardTheme(localStorage.getItem(VK_THEME_KEY)||"bordeaux");
+  });
+})();
 </script>
+
+
+<style id="vkDashboardPlus">
+/* ===== VAN KA RESTAU — Dashboard Plus ===== */
+.adminPlusToolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.adminPlusToolbar input,.adminPlusToolbar select{max-width:240px}
+.kpiGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpiCard{background:#fff;border:1px solid #eee1d5;border-radius:16px;padding:16px;box-shadow:0 5px 18px #00000008}
+.kpiCard small{color:var(--muted);font-weight:700}.kpiCard b{display:block;font-size:27px;margin-top:4px;color:var(--primary)}
+.quickGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.quickBtn{border:1px solid #eadbca;background:#fff;border-radius:14px;padding:14px;text-align:left;font-weight:800;cursor:pointer}.quickBtn:hover{border-color:var(--gold);transform:translateY(-1px)}
+.dashCols{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.panelBox{background:#fff;border:1px solid #eee1d5;border-radius:16px;padding:16px;margin-bottom:16px}
+.panelBox h4{margin:0 0 12px}.miniRow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee}.miniRow:last-child{border-bottom:0}
+.statusPill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;background:#eee5dc}.statusPill.green{background:#e8f6ee;color:#237a4b}.statusPill.red{background:#fbe8e6;color:#b3261e}.statusPill.gold{background:#fff2cf;color:#8a6200}
+.filterHint{font-size:12px;color:var(--muted);margin-top:-7px;margin-bottom:12px}.customerGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.customerCard{border:1px solid #eadbca;border-radius:14px;padding:14px;background:#fff}.customerCard h4{margin:0 0 5px}
+.reportGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.reportCard{background:#fff;border-radius:14px;padding:15px;border:1px solid #eadbca}.reportCard b{font-size:23px;display:block;color:var(--primary)}
+.barList{display:grid;gap:8px}.barLine{display:grid;grid-template-columns:130px 1fr 70px;gap:8px;align-items:center}.barTrack{height:10px;background:#eee5dc;border-radius:999px;overflow:hidden}.barFill{height:100%;background:var(--primary);border-radius:999px}
+.settingsGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.settingCard{border:1px solid #eadbca;border-radius:14px;padding:15px;background:#fff}.settingCard h4{margin-top:0}
+@media(max-width:760px){.kpiGrid{grid-template-columns:1fr 1fr}.quickGrid{grid-template-columns:1fr 1fr}.dashCols,.customerGrid,.reportGrid,.settingsGrid{grid-template-columns:1fr}.barLine{grid-template-columns:90px 1fr 60px}}
+</style>
+
+<script id="vkSupabaseMenu">
+(function(){
+  "use strict";
+
+  function mapMenuRow(row){
+    return {
+      id: row.id,
+      name: row.name || "",
+      cat: row.category || row.cat || "Plats maliens",
+      price: Number(row.price || 0),
+      emoji: row.emoji || "🍽️",
+      photo: row.photo_url || row.photo || "",
+      desc: row.description || row.desc || "",
+      available: row.available !== false
+    };
+  }
+
+  window.loadSupabaseMenu=async function(){
+    const {data,error}=await supabaseClient
+      .from("menu_items")
+      .select("id,name,category,price,description,emoji,photo_url,available,created_at,updated_at")
+      .order("created_at",{ascending:false});
+    if(error){
+      console.error("Supabase menu:",error);
+      dishes=[];
+      renderMenu();
+      if(currentUser?.role==="Gérant") toast("Impossible de charger le menu Supabase : "+error.message);
+      return false;
+    }
+    dishes=(data||[]).map(mapMenuRow);
+    renderMenu();
+    if(currentUser?.role==="Gérant" && document.getElementById("adminContent") && adminCurrent==="dishes"){
+      renderAdminDishes();
+    }
+    updateStats();
+    return true;
+  };
+
+  // Les commandes/réservations restent inchangées : seule la source du menu est déplacée vers Supabase.
+  window.addEventListener("DOMContentLoaded",()=>loadSupabaseMenu());
+
+  const oldShowAdmin=window.showAdmin;
+  window.showAdmin=async function(){
+    if(typeof oldShowAdmin==="function")oldShowAdmin();
+    await loadSupabaseMenu();
+  };
+})();
+</script>
+
+<script id="vkDashboardPlusScript">
+(function(){
+  'use strict';
+
+  const NOTIF_KEY='vk_notifications';
+  const getNotifs=()=>{try{return JSON.parse(localStorage.getItem(NOTIF_KEY))||[]}catch(e){return[]}};
+  const saveNotifs=n=>localStorage.setItem(NOTIF_KEY,JSON.stringify(n));
+  function addNotif(type,title,message,ref){
+    const n=getNotifs();
+    n.unshift({id:'N-'+Date.now(),type,title,message,reference_id:ref||'',is_read:false,created_at:new Date().toISOString()});
+    saveNotifs(n.slice(0,200));
+  }
+  function notifTime(x){try{return new Date(x).toLocaleString('fr-FR')}catch(e){return x||''}}
+  function escapeHtml(s){return esc(String(s??''));}
+
+  const originalSubmitOrder=window.submitOrder;
+  const originalSubmitBooking=window.submitBooking;
+  if(typeof originalSubmitOrder==='function'){
+    window.submitOrder=function(e){
+      const before=(window.orders||[]).length;
+      originalSubmitOrder(e);
+      const after=(window.orders||[]);
+      if(after.length>before){const o=after[0];addNotif('order','Nouvelle commande',`${o.name||'Client'} — ${money(o.total||0)}`,o.id);}
+    };
+  }
+  if(typeof originalSubmitBooking==='function'){
+    window.submitBooking=function(e){
+      const before=(window.bookings||[]).length;
+      originalSubmitBooking(e);
+      const after=(window.bookings||[]);
+      if(after.length>before){const b=after[0];addNotif('booking','Nouvelle réservation',`${b.name||'Client'} — ${b.date||''} à ${b.time||''}`,b.id);}
+    };
+  }
+
+  function ensureTabs(){
+    const tabs=document.querySelector('.tabs');
+    if(!tabs)return;
+    const defs=[
+      ['overview','📊 Vue',''],
+      ['orders','📦 Commandes',''],
+      ['bookings','📅 Réservations',''],
+      ['dishes','🍛 Menu',''],
+      ['customers','👤 Clients','managerOnly'],
+      ['notifications','🔔 Notifications',''],
+      ['staff','👥 Employés','managerOnly'],
+      ['history','🗂️ Historique','managerOnly'],
+      ['reports','📈 Rapports','managerOnly'],
+      ['settings','⚙️ Réglages','managerOnly']
+    ];
+    defs.forEach(([key,label,cls])=>{
+      let b=tabs.querySelector(`[data-tab="${key}"]`);
+      if(!b){b=document.createElement('button');b.className='tab '+cls;b.dataset.tab=key;b.textContent=label;b.type='button';b.addEventListener('click',()=>window.adminTab(key));tabs.appendChild(b);}
+    });
+  }
+
+  function setActiveTab(tab){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));}
+
+  function renderOverview(){
+    const c=document.getElementById('adminContent');
+    const activeOrders=(orders||[]).filter(o=>!['Livrée','Annulée'].includes(o.status)).length;
+    const pendingBookings=(bookings||[]).filter(b=>b.status==='En attente').length;
+    const revenue=(orders||[]).filter(o=>o.status!=='Annulée').reduce((s,o)=>s+Number(o.total||0),0);
+    const unread=getNotifs().filter(n=>!n.is_read).length;
+    const today=new Date().toISOString().slice(0,10);
+    const todayOrders=(orders||[]).filter(o=>String(o.date||'').includes(new Date().toLocaleDateString('fr-FR'))).length;
+    c.innerHTML=`
+      <div class="kpiGrid">
+        <div class="kpiCard"><small>Commandes actives</small><b>${activeOrders}</b></div>
+        <div class="kpiCard"><small>Réservations en attente</small><b>${pendingBookings}</b></div>
+        <div class="kpiCard"><small>Chiffre commandes</small><b>${money(revenue)}</b></div>
+        <div class="kpiCard"><small>Notifications non lues</small><b>${unread}</b></div>
+      </div>
+      <div class="quickGrid">
+        <button class="quickBtn" onclick="adminTab('orders')">📦 Voir les commandes</button>
+        <button class="quickBtn" onclick="adminTab('bookings')">📅 Voir les réservations</button>
+        <button class="quickBtn" onclick="adminTab('dishes')">🍛 Gérer le menu</button>
+        <button class="quickBtn" onclick="adminTab('notifications')">🔔 Notifications</button>
+      </div>
+      <div class="dashCols">
+        <div class="panelBox"><h4>🕘 Dernières commandes</h4>${orders.length?orders.slice(0,6).map(o=>`<div class="miniRow"><span><b>${escapeHtml(o.id)}</b> — ${escapeHtml(o.name)}</span><span>${money(o.total||0)} <span class="statusPill">${escapeHtml(o.status)}</span></span></div>`).join(''):'<div class="empty">Aucune commande.</div>'}</div>
+        <div class="panelBox"><h4>📅 Prochaines réservations</h4>${bookings.length?bookings.slice(0,6).map(b=>`<div class="miniRow"><span><b>${escapeHtml(b.name)}</b><br><small>${escapeHtml(b.date)} à ${escapeHtml(b.time)}</small></span><span class="statusPill ${b.status==='Confirmée'?'green':b.status==='Annulée'?'red':'gold'}">${escapeHtml(b.status)}</span></div>`).join(''):'<div class="empty">Aucune réservation.</div>'}</div>
+      </div>
+      <div class="panelBox"><h4>💡 Centre de contrôle</h4><p class="muted">Depuis cette page, le gérant peut suivre l'activité, traiter les commandes, confirmer les réservations, gérer le menu, consulter les clients, les notifications et les rapports.</p></div>`;
+  }
+
+  function renderOrdersPlus(){
+    const c=document.getElementById('adminContent');
+    c.innerHTML=`<div class="adminPlusToolbar"><input id="orderSearchPlus" placeholder="🔎 Rechercher client, téléphone ou commande..." oninput="renderOrdersPlus()"><select id="orderFilterPlus" onchange="renderOrdersPlus()"><option value="">Tous les statuts</option>${['Nouvelle','Confirmée','En préparation','Prête','Livrée','Annulée'].map(s=>`<option>${s}</option>`).join('')}</select><button class="btn btnLight" onclick="adminTab('notifications')">🔔 Notifications</button></div><div class="filterHint">${orders.length} commande(s) au total</div><div id="ordersPlusList"></div>`;
+    const q=(document.getElementById('orderSearchPlus')?.value||'').toLowerCase();
+    const f=document.getElementById('orderFilterPlus')?.value||'';
+    const list=orders.filter(o=>(!f||o.status===f)&&(`${o.id} ${o.name} ${o.phone}`.toLowerCase().includes(q)));
+    document.getElementById('ordersPlusList').innerHTML=list.length?list.map(o=>`<div class="adminRow"><div><b>${escapeHtml(o.id)} — ${escapeHtml(o.name)}</b><br><span class="muted">📞 ${escapeHtml(o.phone)} • ${escapeHtml(o.type)} • ${money(o.total||0)}</span><br><small>${escapeHtml(o.date||'')}</small></div><div class="adminActions"><span class="statusPill ${o.status==='Livrée'||o.status==='Prête'?'green':o.status==='Annulée'?'red':'gold'}">${escapeHtml(o.status)}</span><select onchange="setOrderStatus('${escapeHtml(o.id)}',this.value)">${['Nouvelle','Confirmée','En préparation','Prête','Livrée','Annulée'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select><button class="btn btnLight" onclick="viewOrder('${escapeHtml(o.id)}')">Détails</button></div></div>`).join(''):'<div class="empty">Aucune commande correspondant à la recherche.</div>';
+  }
+
+  function renderBookingsPlus(){
+    const c=document.getElementById('adminContent');
+    c.innerHTML=`<div class="adminPlusToolbar"><input id="bookingSearchPlus" placeholder="🔎 Rechercher nom ou téléphone..." oninput="renderBookingsPlus()"><select id="bookingFilterPlus" onchange="renderBookingsPlus()"><option value="">Tous les statuts</option>${['En attente','Confirmée','Terminée','Annulée'].map(s=>`<option>${s}</option>`).join('')}</select></div><div id="bookingPlusList"></div>`;
+    const q=(document.getElementById('bookingSearchPlus')?.value||'').toLowerCase(); const f=document.getElementById('bookingFilterPlus')?.value||'';
+    const list=bookings.filter(b=>(!f||b.status===f)&&(`${b.id} ${b.name} ${b.phone}`.toLowerCase().includes(q)));
+    document.getElementById('bookingPlusList').innerHTML=list.length?list.map(b=>`<div class="adminRow"><div><b>${escapeHtml(b.id)} — ${escapeHtml(b.name)}</b><br><span class="muted">📞 ${escapeHtml(b.phone)} • ${escapeHtml(b.date)} à ${escapeHtml(b.time)} • ${escapeHtml(b.people)} personne(s)</span>${b.note?`<br><small>💬 ${escapeHtml(b.note)}</small>`:''}</div><div class="adminActions"><select onchange="setBookingStatus('${escapeHtml(b.id)}',this.value)">${['En attente','Confirmée','Terminée','Annulée'].map(s=>`<option ${s===b.status?'selected':''}>${s}</option>`).join('')}</select></div></div>`).join(''):'<div class="empty">Aucune réservation correspondant à la recherche.</div>';
+  }
+
+  function renderCustomers(){
+    const map={};
+    [...orders,...bookings].forEach(x=>{const phone=String(x.phone||'').trim();if(!phone)return;if(!map[phone])map[phone]={name:x.name||'Client',phone,orders:0,bookings:0,total:0,last:''};if(x.id&&String(x.id).startsWith('VK-')){map[phone].orders++;if(x.status!=='Annulée')map[phone].total+=Number(x.total||0)}else map[phone].bookings++;map[phone].last=x.date||map[phone].last;});
+    const arr=Object.values(map); c=document.getElementById('adminContent');
+    c.innerHTML=`<div class="adminPlusToolbar"><input id="customerSearchPlus" placeholder="🔎 Rechercher un client..." oninput="renderCustomers()"></div><div class="customerGrid" id="customerPlusList"></div>`;
+    const q=(document.getElementById('customerSearchPlus')?.value||'').toLowerCase(); const list=arr.filter(x=>`${x.name} ${x.phone}`.toLowerCase().includes(q));
+    document.getElementById('customerPlusList').innerHTML=list.length?list.map(x=>`<div class="customerCard"><h4>👤 ${escapeHtml(x.name)}</h4><div class="muted">📞 ${escapeHtml(x.phone)}</div><p>📦 ${x.orders} commande(s)<br>📅 ${x.bookings} réservation(s)<br>💰 ${money(x.total)}</p><button class="btn btnLight" onclick="filterCustomer('${escapeHtml(x.phone)}')">Voir ses commandes</button></div>`).join(''):'<div class="empty" style="grid-column:1/-1">Aucun client trouvé.</div>';
+  }
+  window.filterCustomer=function(phone){adminTab('orders');setTimeout(()=>{const i=document.getElementById('orderSearchPlus');if(i){i.value=phone;renderOrdersPlus()}},0)};
+
+  function renderNotifications(){
+    const c=document.getElementById('adminContent'); const n=getNotifs(); const unread=n.filter(x=>!x.is_read).length;
+    c.innerHTML=`<div class="adminPlusToolbar"><h3 style="margin:0">🔔 Notifications (${unread} non lue(s))</h3><button class="btn btnLight" onclick="markAllNotificationsRead()">✓ Tout marquer comme lu</button><button class="btn danger" onclick="clearNotifications()">Vider</button></div>${n.length?n.map(x=>`<div class="adminRow" style="opacity:${x.is_read?.65:1}"><div><b>${escapeHtml(x.title)}</b><br><span class="muted">${escapeHtml(x.message)}</span><br><small>${notifTime(x.created_at)}</small></div><div class="adminActions">${x.is_read?'<span class="statusPill green">Lue</span>':`<button class="btn btnLight" onclick="markNotificationRead('${x.id}')">Marquer lu</button>`}</div></div>`).join(''):'<div class="empty">Aucune notification.</div>'}`;
+  }
+  window.markNotificationRead=function(id){const n=getNotifs();const x=n.find(a=>a.id===id);if(x)x.is_read=true;saveNotifs(n);renderNotifications();updateStats()};
+  window.markAllNotificationsRead=function(){const n=getNotifs().map(x=>({...x,is_read:true}));saveNotifs(n);renderNotifications()};
+  window.clearNotifications=function(){if(!confirm('Supprimer toutes les notifications ?'))return;saveNotifs([]);renderNotifications();toast('Notifications supprimées')};
+
+  function renderReports(){
+    const valid=orders.filter(o=>o.status!=='Annulée'); const revenue=valid.reduce((s,o)=>s+Number(o.total||0),0); const avg=valid.length?revenue/valid.length:0;
+    const byStatus={}; valid.forEach(o=>byStatus[o.status]=(byStatus[o.status]||0)+1);
+    const byDish={}; valid.forEach(o=>(o.items||[]).forEach(it=>{const d=dishes.find(z=>String(z.id)===String(it.id));const name=d?d.name:'Plat supprimé';byDish[name]=(byDish[name]||0)+Number(it.qty||0)}));
+    const top=Object.entries(byDish).sort((a,b)=>b[1]-a[1]).slice(0,6); const max=Math.max(1,...top.map(x=>x[1]));
+    document.getElementById('adminContent').innerHTML=`<div class="reportGrid"><div class="reportCard"><small>Chiffre d'affaires</small><b>${money(revenue)}</b></div><div class="reportCard"><small>Commandes valides</small><b>${valid.length}</b></div><div class="reportCard"><small>Panier moyen</small><b>${money(Math.round(avg))}</b></div></div><div class="dashCols" style="margin-top:16px"><div class="panelBox"><h4>📊 Commandes par statut</h4>${Object.keys(byStatus).length?Object.entries(byStatus).map(([k,v])=>`<div class="miniRow"><span>${escapeHtml(k)}</span><b>${v}</b></div>`).join(''):'<div class="empty">Pas encore de données.</div>'}</div><div class="panelBox"><h4>🏆 Plats les plus commandés</h4><div class="barList">${top.length?top.map(([k,v])=>`<div class="barLine"><span title="${escapeHtml(k)}">${escapeHtml(k).slice(0,18)}</span><div class="barTrack"><div class="barFill" style="width:${Math.round(v/max*100)}%"></div></div><b>${v}</b></div>`).join(''):'<div class="empty">Pas encore de données.</div>'}</div></div></div><div class="panelBox"><h4>🗓️ Analyse</h4><p class="muted">Ces rapports utilisent les commandes actuellement conservées dans ce navigateur. Ils seront remplacés par des statistiques Supabase centralisées lorsque la partie serveur sera branchée.</p></div>`;
+  }
+
+  function renderSettings(){
+    document.getElementById('adminContent').innerHTML=`<div class="settingsGrid"><div class="settingCard"><h4>🎨 Apparence</h4><p class="muted">Choisis le thème du dashboard.</p><button class="btn btnLight" onclick="openThemePicker()">Changer le thème</button></div><div class="settingCard"><h4>🔐 Session</h4><p class="muted">Compte connecté : <b>${escapeHtml(currentUser?.name||'')}</b><br>Rôle : ${escapeHtml(currentUser?.role||'')}</p><button class="btn btnLight" onclick="logout()">Déconnexion</button></div><div class="settingCard"><h4>🧹 Nettoyage</h4><p class="muted">Réinitialise uniquement l'affichage du dashboard.</p><button class="btn danger" onclick="resetManagerDashboard()">Réinitialiser l'affichage</button></div><div class="settingCard"><h4>☁️ Supabase</h4><p class="muted">Le projet Supabase est déjà configuré pour l'authentification. Les données métier de ce fichier utilisent encore temporairement le stockage local.</p><span class="statusPill green">Auth connectée</span></div></div>`;
+  }
+
+  const originalUpdateStats=window.updateStats;
+  window.updateStats=function(){if(typeof originalUpdateStats==='function')originalUpdateStats();const unread=getNotifs().filter(n=>!n.is_read).length;document.querySelectorAll('[data-tab="notifications"]').forEach(b=>{b.textContent=`🔔 Notifications${unread?` (${unread})`:''}`});};
+
+  window.adminTab=function(tab){
+    ensureTabs(); adminCurrent=tab; setActiveTab(tab);
+    if(tab==='overview')return renderOverview();
+    if(tab==='orders')return renderOrdersPlus();
+    if(tab==='bookings')return renderBookingsPlus();
+    if(tab==='dishes')return renderAdminDishes();
+    if(tab==='customers')return renderCustomers();
+    if(tab==='notifications')return renderNotifications();
+    if(tab==='staff')return renderAdminStaff();
+    if(tab==='history')return renderAdminHistory();
+    if(tab==='reports')return renderReports();
+    if(tab==='settings')return renderSettings();
+  };
+
+  const oldShowAdmin=window.showAdmin;
+  window.showAdmin=function(){
+    if(typeof oldShowAdmin==='function')oldShowAdmin();
+    ensureTabs();
+    updateStats();
+    if(currentUser && adminCurrent==='orders')window.adminTab('overview');
+  };
+
+  document.addEventListener('DOMContentLoaded',()=>{ensureTabs();updateStats();});
+})();
+</script>
+
+
+<!-- VAN KA RESTAU — correction finale : ajout/modification menu via RPC sécurisé -->
+<script id="vkMenuRpcFix">
+(function(){
+  "use strict";
+
+  window.saveDish = async function(e,id){
+    e.preventDefault();
+    if(!currentUser || currentUser.role!=="Gérant"){
+      return toast("Action réservée au gérant.");
+    }
+
+    const name=document.getElementById("dName")?.value.trim();
+    const price=Number(document.getElementById("dPrice")?.value);
+    const cat=document.getElementById("dCat")?.value.trim()||"Plats maliens";
+    const desc=document.getElementById("dDesc")?.value.trim()||"";
+    const file=document.getElementById("dPhoto")?.files?.[0];
+
+    if(!name || !Number.isFinite(price) || price<0){
+      return toast("Nom et prix sont obligatoires.");
+    }
+
+    const old=id ? dishes.find(d=>String(d.id)===String(id)) : null;
+    const form=e.target;
+    const btn=form?.querySelector('button[type="submit"]');
+    if(btn){btn.disabled=true;btn.textContent="Enregistrement…";}
+
+    try{
+      const {data:authData,error:authError}=await supabaseClient.auth.getUser();
+      if(authError || !authData?.user?.id){
+        throw new Error("Session Supabase introuvable. Déconnecte-toi puis reconnecte-toi.");
+      }
+
+      const {data:profile,error:profileError}=await supabaseClient
+        .from("profiles")
+        .select("id,role,active")
+        .eq("id",authData.user.id)
+        .single();
+
+      if(profileError) throw new Error("Impossible de vérifier le compte Gérant : "+profileError.message);
+      if(profile.role!=="gerant" || profile.active===false){
+        throw new Error("Ce compte n'est pas autorisé comme Gérant actif.");
+      }
+
+      let photo=old?.photo||"";
+      if(file){
+        photo=await uploadDishPhoto(file);
+      }
+
+      const {data,error}=await supabaseClient.rpc("gerant_upsert_menu_item",{
+        p_id: id ? String(id) : null,
+        p_name: name,
+        p_category: cat,
+        p_description: desc,
+        p_price: price,
+        p_emoji: "🍽️",
+        p_photo_url: photo || null,
+        p_available: old ? old.available!==false : true
+      });
+
+      if(error) throw error;
+
+      await loadSupabaseMenu();
+      document.getElementById("tempDish")?.remove();
+      renderAdminDishes();
+      updateStats();
+      renderMenu();
+      toast(id ? "Plat modifié avec succès." : "Plat ajouté avec succès.");
+    }catch(err){
+      console.error("VAN KA RESTAU — menu RPC:",err);
+      toast("Impossible d'enregistrer le plat : "+(err?.message||"erreur Supabase"));
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent="Enregistrer dans Supabase";}
+    }
+  };
+})();
+  //signature de madou//
+  const signature = document.querySelector(".signature span");
+
+let position = 0;
+let direction = 1;
+
+function bouger() {
+    position += 0.5 * direction;
+
+    if (position > 8 || position < 0) {
+        direction *= -1;
+    }
+
+    signature.style.transform = `translateX(${position}px)`;
+
+    requestAnimationFrame(bouger);
+}
+
+bouger();
+</script>
+
+
+
+
+    <!-- Ton contenu -->
+
+    
+    
+
+
+
+
+
+
+
+  
 </body>
 </html>
